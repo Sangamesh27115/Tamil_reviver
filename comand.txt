@@ -1,0 +1,2 @@
+npm init -y
+npm i express mongoose dotenv jsonwebtoken cloudinary bcryptjs cors nodemon -d

@@ -1,0 +1,12 @@
+{
+  "appId": "com.example.studentapp",
+  "appName": "student-app-mobile",
+  "webDir": "build",
+  "bundledWebRuntime": false,
+  "server": {
+    "cleartext": true
+  }
+}
+
+
+
