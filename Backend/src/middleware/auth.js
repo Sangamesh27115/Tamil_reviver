@@ -2,31 +2,40 @@ import jwt from "jsonwebtoken";
 import { User, Student, Teacher, Admin } from "../models/User.js";
 
 // Middleware to verify JWT token
+// Backend/src/middleware/auth.js
 export const authenticateToken = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-      return res.status(401).json({ message: "Access token required" });
+      return res.status(401).json({ 
+        status: 'error',
+        message: "Access token required" 
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id)
+      .select('-password')
+      .lean(); // For better performance
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
-
-    if (!user.isActive) {
-      return res.status(401).json({ message: "Account deactivated" });
+      return res.status(401).json({ 
+        status: 'error',
+        message: "Invalid token" 
+      });
     }
 
     req.user = user;
     next();
   } catch (error) {
     console.error("Auth middleware error:", error);
-    return res.status(403).json({ message: "Invalid or expired token" });
+    return res.status(403).json({ 
+      status: 'error',
+      message: "Invalid or expired token",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 

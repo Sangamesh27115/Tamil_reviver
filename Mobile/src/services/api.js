@@ -1,7 +1,9 @@
+// Mobile/src/services/api.js
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000/api',
+  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -9,32 +11,31 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
+  async (config) => {
+    const token = await SecureStore.getItemAsync('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor
+// Response interceptor with proper error handling
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
+  (response) => response,
+  async (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Clear invalid token
+      await AsyncStorage.removeItem('token');
+      // Navigate to login
+      // You'll need to implement navigation reference
     }
     return Promise.reject(error);
   }
 );
+
+// export default api; // Removed duplicate default export
 
 // Game API functions
 export const gameAPI = {
