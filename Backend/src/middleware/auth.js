@@ -16,9 +16,7 @@ export const authenticateToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id)
-      .select('-password')
-      .lean(); // For better performance
+    const user = await User.findById(decoded.id).select('-password');
 
     if (!user) {
       return res.status(401).json({ 
@@ -46,7 +44,10 @@ export const authorizeRole = (...roles) => {
       return res.status(401).json({ message: "Authentication required" });
     }
 
-    if (!roles.includes(req.user.role)) {
+    // Normalize roles to lowercase for case-insensitive comparison
+    const userRole = (req.user.role || '').toString().toLowerCase();
+    const allowed = roles.map(r => r.toString().toLowerCase());
+    if (!allowed.includes(userRole)) {
       return res.status(403).json({ 
         message: `Access denied. Required roles: ${roles.join(', ')}` 
       });

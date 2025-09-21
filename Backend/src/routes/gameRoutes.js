@@ -11,10 +11,10 @@ const router = express.Router();
 // Start a new game session
 router.post("/start", authenticateToken, requireStudent, async (req, res) => {
   try {
-    const { gameType, difficulty = 'Medium', wordCount = 10, domain, period } = req.body;
+    const { gameType, difficulty, wordCount = 10, domain, period } = req.body;
 
-    if (!gameType || !['match', 'mcq', 'hints'].includes(gameType)) {
-      return res.status(400).json({ message: 'Invalid game type. Must be match, mcq, or hints' });
+    if (!gameType || !['match', 'mcq', 'hints', 'jumbled'].includes(gameType)) {
+      return res.status(400).json({ message: 'Invalid game type. Must be match, mcq, hints, or jumbled' });
     }
 
     // Build filters for word selection
@@ -23,10 +23,18 @@ router.post("/start", authenticateToken, requireStudent, async (req, res) => {
     if (domain && domain !== 'All') filters.domain = domain;
     if (period && period !== 'All') filters.period = period;
 
+    // Determine how many words were requested (ensure integer)
+    const requestedCount = Number.isFinite(Number.parseInt(wordCount)) ? parseInt(wordCount) : 10;
+
+    // Diagnostic logging to help debug mismatches between DB and aggregation
+    console.log('[game/start] requesting words', { requestedCount, filters });
+
     // Get random words
-    const words = await Word.getRandomWords(parseInt(wordCount), filters);
-    
-    if (words.length < wordCount) {
+    const words = await Word.getRandomWords(requestedCount, filters);
+
+    console.log('[game/start] Word.getRandomWords returned', { count: words.length, ids: words.map(w => w._id ? w._id.toString() : w._id) });
+
+    if (words.length < requestedCount) {
       return res.status(400).json({ 
         message: `Not enough words available. Found ${words.length} words.` 
       });
@@ -95,6 +103,23 @@ router.post("/start", authenticateToken, requireStudent, async (req, res) => {
         meaning_en: word.meaning_en,
         notes: word.notes
       }));
+    } else if (gameType === 'jumbled') {
+      questions = words.map(word => {
+        // Jumble the letters of the word
+        const jumbledWord = word.word
+          .split('')
+          .sort(() => Math.random() - 0.5)
+          .join('');
+        return {
+          wordId: word._id,
+          question: `Unscramble this word: ${jumbledWord}`,
+          correctAnswer: word.word,
+          jumbledWord,
+          word: word.word,
+          meaning_ta: word.meaning_ta,
+          meaning_en: word.meaning_en
+        };
+      });
     }
 
     const gameSession = new GameSession({

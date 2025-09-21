@@ -128,14 +128,16 @@ WordSchema.methods.getDifficultyScore = function() {
   return Math.max(0, Math.min(100, baseScore + adjustment));
 };
 
-// Static method to get random words for games
+// Static method to get random words for games using aggregation
 WordSchema.statics.getRandomWords = async function(count = 10, filters = {}) {
-  const query = { isActive: true, ...filters };
-  const words = await this.find(query).limit(count * 3); // Get more than needed for randomization
-  
-  // Shuffle and return requested count
-  const shuffled = words.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+  const match = { isActive: true, ...filters };
+  // Use aggregation with $sample for randomness; falls back to available count
+  const pipeline = [
+    { $match: match },
+    { $sample: { size: Math.max(1, parseInt(count)) } }
+  ];
+  const results = await this.aggregate(pipeline);
+  return results;
 };
 
 // Static method to get words by difficulty

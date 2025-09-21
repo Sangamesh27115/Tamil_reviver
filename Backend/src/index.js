@@ -1,10 +1,18 @@
 import express from 'express';
+// No JSON file access for words, only MongoDB
+import axios from 'axios';
+
 import dotenv from 'dotenv';
 import cors from 'cors';
 import axios from 'axios';
 
 // Load environment variables
 dotenv.config();
+
+// Security imports
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
 
 // Import routes
 import authRouts from './routes/authRouts.js';
@@ -17,8 +25,23 @@ import { connectDB } from './lib/db.js';
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// Security middleware
+app.use(helmet()); // Add security headers
+app.use(morgan('combined')); // Logging
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.WEB_URL, process.env.MOBILE_URL].filter(Boolean)
+    : '*'
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
+
+// Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 

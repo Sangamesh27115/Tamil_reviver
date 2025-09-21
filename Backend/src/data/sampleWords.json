@@ -1,0 +1,59 @@
+{
+  "words": [
+    {
+      "word": "அகரம்",
+      "meaning_ta": "அகரம் - எழுத்து",
+      "meaning_en": "letter",
+      "domain": "Culture",
+      "period": "Ancient",
+      "modern_equivalent": "letter",
+      "status": "historical",
+      "notes": "Used in ancient inscriptions",
+      "difficulty": "Easy"
+    },
+    {
+      "word": "நீர்",
+      "meaning_ta": "நீர்",
+      "meaning_en": "water",
+      "domain": "Nature",
+      "period": "Contemporary",
+      "modern_equivalent": "water",
+      "status": "traditional; still seen rurally",
+      "notes": "Common word",
+      "difficulty": "Easy"
+    },
+    {
+      "word": "ஊர்",
+      "meaning_ta": "ஊர்",
+      "meaning_en": "village",
+      "domain": "Culture",
+      "period": "Classical/Medieval",
+      "modern_equivalent": "village",
+      "status": "archaic",
+      "notes": "Frequently used in old poems",
+      "difficulty": "Easy"
+    },
+    {
+      "word": "மழை",
+      "meaning_ta": "மழை",
+      "meaning_en": "rain",
+      "domain": "Nature",
+      "period": "Contemporary",
+      "modern_equivalent": "rain",
+      "status": "traditional; still seen rurally",
+      "notes": "Somtimes has poetic usage",
+      "difficulty": "Easy"
+    },
+    {
+      "word": "அன்னம்",
+      "meaning_ta": "அன்னம் - உணவு",
+      "meaning_en": "food",
+      "domain": "Food",
+      "period": "Classical/Medieval",
+      "modern_equivalent": "food",
+      "status": "historical",
+      "notes": "Ancient term for cooked rice",
+      "difficulty": "Medium"
+    }
+  ]
+}

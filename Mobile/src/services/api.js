@@ -27,56 +27,47 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response?.status === 401) {
       // Clear invalid token
-      await AsyncStorage.removeItem('token');
-      // Navigate to login
-      // You'll need to implement navigation reference
+      try {
+        await SecureStore.deleteItemAsync('token');
+      } catch (e) {
+        // ignore
+      }
+      // Optionally trigger app-wide logout flow here
     }
     return Promise.reject(error);
   }
 );
 
-// export default api; // Removed duplicate default export
-
-// Game API functions
+// Game API functions - match backend endpoints
 export const gameAPI = {
-  // Start a new game
-  startGame: (gameData) => api.post('/game/start-game', gameData),
-  
-  // Submit answer
-  submitAnswer: (answerData) => api.post('/game/submit-answer', answerData),
-  
-  // Complete game
-  completeGame: (sessionId) => api.post('/game/complete-game', { sessionId }),
-  
-  // Get game history
+  startGame: (gameData) => api.post('/game/start', gameData),
+  submitAnswer: (sessionId, questionIndex, answer, timeSpent = 0) =>
+    api.post(`/game/${sessionId}/answer`, { questionIndex, answer, timeSpent }),
+  useHint: (sessionId, questionIndex) => api.post(`/game/${sessionId}/hint`, { questionIndex }),
+  completeGame: (sessionId) => api.post(`/game/${sessionId}/complete`),
+  abandonGame: (sessionId) => api.post(`/game/${sessionId}/abandon`),
   getGameHistory: (params = {}) => api.get('/game/history', { params }),
-  
-  // Get leaderboard
-  getLeaderboard: (limit = 10) => api.get('/game/leaderboard', { params: { limit } }),
-  
-  // Get user stats
+  getLeaderboard: (params = {}) => api.get('/game/leaderboard', { params }),
   getUserStats: () => api.get('/game/stats'),
+  getActiveGame: () => api.get('/game/active')
 };
 
 // Word API functions
 export const wordAPI = {
-  // Get all words
   getWords: (params = {}) => api.get('/words', { params }),
-  
-  // Get word by ID
+  getRandomWords: (params = {}) => api.get('/words/random', { params }),
+  searchWords: (params = {}) => api.get('/words/search', { params }),
   getWord: (id) => api.get(`/words/${id}`),
-  
-  // Get word statistics
-  getWordStats: () => api.get('/words/stats/overview'),
+  getWordStats: () => api.get('/words/stats/overview')
 };
 
 // Auth API functions
 export const authAPI = {
-  // Register user
   register: (userData) => api.post('/auth/register', userData),
-  
-  // Login user
   login: (credentials) => api.post('/auth/login', credentials),
+  getProfile: () => api.get('/auth/profile'),
+  updateProfile: (profileData) => api.put('/auth/profile', profileData),
+  changePassword: (currentPassword, newPassword) => api.put('/auth/change-password', { currentPassword, newPassword })
 };
 
 export default api;

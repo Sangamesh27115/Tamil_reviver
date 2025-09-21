@@ -1,33 +1,108 @@
-{
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "index.js",
+{{{
+
+  "name": "tamil-reviver-backend",
+
+  "version": "1.0.0",  "name": "tamil-reviver-backend",  "name": "tamil-reviver-backend",
+
+  "main": "src/index.js",
+
+  "type": "module",  "version": "1.0.0",  "version": "1.0.0",
+
   "scripts": {
-    "dev": "nodemon src/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "type":"module", 
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cloudinary": "^2.7.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.0",
-    "node-fetch": "^3.3.2",
-    "axios": "^1.3.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  },
-  "scripts": {
+
+    "start": "node src/index.js",  "main": "index.js",  "main": "index.js",
+
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "seed": "node src/scripts/seedDatabase.js",
-    "test": "node src/scripts/testAPI.js"
+
+    "test": "node src/scripts/smokeTest.js"  "type": "module",  "type":"module",
+
+  },
+
+  "keywords": [  "scripts": {  "scripts": {
+
+    "tamil",
+
+    "language",    "start": "node src/index.js",    "start": "node src/index.js",
+
+    "education",
+
+    "game"    "dev": "nodemon src/index.js",    "dev": "nodemon src/index.js",
+
+  ],
+
+  "author": "",    "test": "node src/scripts/smokeTest.js"    "test": "node src/scripts/smokeTest.js"
+
+  "license": "ISC",
+
+  "description": "Backend for Tamil Reviver - A game to learn extinct Tamil words",  },  },
+
+  "dependencies": {
+
+    "bcryptjs": "^3.0.2",  "keywords": [  "keywords": ["tamil", "language", "education", "game"],
+
+    "cloudinary": "^2.7.0",
+
+    "cors": "^2.8.5",    "tamil",  "author": "",
+
+    "dotenv": "^17.2.1",
+
+    "express": "^4.18.2",    "language",  "license": "ISC",
+
+    "express-rate-limit": "^7.1.5",
+
+    "helmet": "^7.1.0",    "education",  "description": "Backend for Tamil Reviver - A game to learn extinct Tamil words",
+
+    "jsonwebtoken": "^9.0.2",
+
+    "mongoose": "^8.18.0",    "game"  "dependencies": {
+
+    "morgan": "^1.10.0",
+
+    "node-fetch": "^3.3.2",  ],    "bcryptjs": "^3.0.2",
+
+    "axios": "^1.3.4"
+
+  },  "author": "",    "cloudinary": "^2.7.0",
+
+  "devDependencies": {
+
+    "nodemon": "^3.1.10"  "license": "ISC",    "cors": "^2.8.5",
+
+  }
+
+}  "description": "Backend for Tamil Reviver - A game to learn extinct Tamil words",    "dotenv": "^17.2.1",
+
+  "dependencies": {    "express": "^4.18.2",
+
+    "bcryptjs": "^3.0.2",    "express-rate-limit": "^7.1.5",
+
+    "cloudinary": "^2.7.0",    "helmet": "^7.1.0",
+
+    "cors": "^2.8.5",    "jsonwebtoken": "^9.0.2",
+
+    "dotenv": "^17.2.1",    "mongoose": "^8.18.0",
+
+    "express": "^4.18.2",    "morgan": "^1.10.0",
+
+    "express-rate-limit": "^7.1.5",    "node-fetch": "^3.3.2",
+
+    "helmet": "^7.1.0",    "axios": "^1.3.4"
+
+    "jsonwebtoken": "^9.0.2",  },
+
+    "mongoose": "^8.18.0",  "devDependencies": {
+
+    "morgan": "^1.10.0",    "nodemon": "^3.1.10"
+
+    "node-fetch": "^3.3.2",  }
+
+    "axios": "^1.3.4"}
+
+  },    "test": "node src/scripts/testAPI.js"
+
+  "devDependencies": {  }
+
+    "nodemon": "^3.1.10"}
+
   }
 }
